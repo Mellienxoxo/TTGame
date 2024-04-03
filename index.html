@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en" style="font-size: 50px;">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>TT Game</title>
+    <!-- build:css main.css -->
+    <style>
+        body,
+        html {
+            padding: 0;
+            margin: 0;
+            text-align: center;
+            background-color: rgb(75, 71, 71);
+            font-family: BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+        }
+
+        img {
+            width: 100vw;
+            max-width: 900px;
+
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(3780deg);
+            }
+        }
+
+        .cone {
+            opacity: 1;
+            transition: opacity .33s ease;
+            font-family: VanillaExtractRegular, ComicBold, sans-serif;
+            font-weight: bold;
+        }
+
+        .win {
+            -webkit-animation-duration: 1s;
+            animation-duration: 1s;
+            -webkit-animation-name: opacity-flash;
+            animation-name: opacity-flash;
+        }
+
+        @keyframes opacity-flash {
+            0% {
+                opacity: 1;
+            }
+
+            16.667% {
+                opacity: .33;
+            }
+
+            33.333% {
+                opacity: .8;
+            }
+
+            50% {
+                opacity: .33;
+            }
+
+            66.667% {
+                opacity: .8;
+            }
+
+            83.333% {
+                opacity: .33;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .my-image {
+            width: 3.4rem;
+
+            margin-top: 0rem;
+        }
+
+        .getBtn {
+            width: 5.14rem;
+            max-width: 900px;
+
+
+            height: 0.95rem;
+
+
+            background: #009D7F;
+            color: #FFF600;
+            font-size: 24px;
+            font-weight: bold;
+            line-height: 0.95rem;
+            border-radius: 0.1rem;
+
+        }
+
+        .tips {
+            font-size: 0.48rem;
+            color: aliceblue;
+            margin-top: 0.3rem;
+            display: block;
+            font-weight: bold;
+
+        }
+
+        .content {
+            position: relative;
+            background: url('img/9F_mini_base.jpg') no-repeat;
+            background-size: 100% 100%;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            align-content: center;
+            justify-content: center;
+        }
+
+        .gameBanner {
+            position: relative;
+            background: url('img/MINI_WEB_4.png') no-repeat;
+            background-size: 7.05rem 3.49rem;
+            width: 7.05rem;
+            height: 3.49rem;
+        }
+
+        .spin-wheel {
+            position: absolute;
+
+            background: url(img/MINI_WEB_turnplate_2.png) no-repeat;
+            background-size: 100% 100%;
+            width: 6.38rem;
+            height: 6.38rem;
+        }
+
+        .spin-cover {
+            position: absolute;
+            background: url(img/MINI_WEB_turnplate_1.png) no-repeat;
+            background-size: 4.38rem 4.38rem;
+            width: 4.38rem;
+            height: 4.38rem;
+            left: 1rem;
+            top: 1rem;
+        }
+
+        .light {
+            position: absolute;
+            background: url(img/MINI_WEB_turnplate_lihgt_1.png) no-repeat;
+            background-size: 5.4rem 5.4rem;
+            width: 5.4rem;
+            height: 5.4rem;
+            left: 0.49rem;
+            top: 0.49rem;
+        }
+
+        .light2 {
+            position: absolute;
+            background: url(img/MINI_WEB_turnplate_lihgt_2.png) no-repeat;
+            background-size: 5.4rem 5.4rem;
+            width: 5.4rem;
+            height: 5.4rem;
+            left: 0.49rem;
+            top: 0.49rem;
+        }
+
+        .spin-btn {
+            position: absolute;
+            background: url(img/MINI_WEB_rodar.png) no-repeat;
+            background-size: 2.04rem 2.36rem;
+            width: 2.04rem;
+            height: 2.36rem;
+            left: 2.17rem;
+            top: 1.90rem;
+        }
+
+        #spin-panel {
+            position: relative;
+            width: 6.38rem;
+            height: 6.38rem;
+            display: flex;
+            justify-content: center;
+            margin: 0px auto;
+            margin-top: -0.34rem;
+
+        }
+
+        .spin-list {
+            position: absolute;
+            width: 6.38rem;
+            height: 6.38rem;
+
+            --ds: -1.5rem;
+        }
+
+        .text1 {
+            /* color: rgb(255, 229, 125); */
+            color: #0C4822;
+            font-size: 0.26rem;
+            font-weight: bold;
+            width: 1.38rem;
+            height: 1.38rem;
+            position: absolute;
+            left: 2.5rem;
+            top: 2.1rem;
+        }
+
+        .text1:nth-child(1) {
+            transform: rotate(-90deg) translate(var(--ds)) rotate(-90deg);
+        }
+
+        .text1:nth-child(2) {
+            transform: rotate(-30deg) translate(var(--ds)) rotate(-90deg);
+        }
+
+        .text1:nth-child(3) {
+            transform: rotate(30deg) translate(var(--ds)) rotate(-90deg);
+        }
+
+        .text1:nth-child(4) {
+            display: none;
+            transform: rotate(90deg) translate(var(--ds)) rotate(-90deg);
+        }
+
+        .text1:nth-child(5) {
+            transform: rotate(150deg) translate(var(--ds)) rotate(-90deg);
+        }
+
+        .text1:nth-child(6) {
+            transform: rotate(210deg) translate(var(--ds)) rotate(-90deg);
+        }
+
+
+        .text2 {
+            color: #0C4822;
+            font-size: 0.26rem;
+            font-weight: bold;
+            width: 1.38rem;
+            height: 1.38rem;
+            position: absolute;
+            left: 2.5rem;
+            top: 1.2rem;
+        }
+
+
+        .item {
+            position: absolute;
+            background: url(img/MINI_WEB_card.png) no-repeat;
+            background-size: 1.14rem 0.71rem;
+            width: 1.14rem;
+            height: 0.71rem;
+            line-height: 0.71rem;
+            text-align: center;
+
+            color: #0C4822;
+
+            left: 41%;
+            top: 44%;
+            font-size: 0.42rem;
+            font-weight: bold;
+
+
+        }
+
+        .item:nth-child(1) {
+            transform: rotate(-90deg) translate(var(--ds)) rotate(-90deg);
+        }
+
+        .item:nth-child(2) {
+            transform: rotate(-30deg) translate(var(--ds)) rotate(-90deg);
+        }
+
+        .item:nth-child(3) {
+            transform: rotate(30deg) translate(var(--ds)) rotate(-90deg);
+        }
+
+        .item:nth-child(4) {
+            display: none;
+            transform: rotate(90deg) translate(var(--ds)) rotate(-90deg);
+        }
+
+        .item:nth-child(5) {
+            transform: rotate(150deg) translate(var(--ds)) rotate(-90deg);
+        }
+
+        .item:nth-child(6) {
+            transform: rotate(210deg) translate(var(--ds)) rotate(-90deg);
+        }
+
+        .clickCover {
+            position: absolute;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popBox {
+            background: url("img/MINI_WEB_base.png") no-repeat;
+            background-size: 7.02rem 7.19rem;
+            width: 7.02rem;
+            height: 7.19rem;
+            display: flex;
+            margin-top: 1.2rem;
+            flex-direction: column;
+            align-items: center;
+            align-content: center;
+            justify-content: center;
+        }
+
+        .popTitle {
+            width: 5.57rem;
+            height: 0.47rem;
+            font-size: 0.43rem;
+            font-family: Arial-BoldMT, Arial;
+            font-weight: normal;
+            color: #FFFFFF;
+            line-height: 0.47rem;
+            text-shadow: 0.04rem 0px 0.16rem #060001;
+        }
+
+        .popTips {
+            width: 5.57rem;
+            height: 0.47rem;
+            font-size: 0.4rem;
+            font-weight: normal;
+            color: #FFFFFF;
+            line-height: 0.47rem;
+            text-shadow: 0.04rem 0px 0.16rem #060001;
+
+        }
+
+        .ticket {
+            background: url("img/MINI_WEB_card_BIG.png") no-repeat;
+            background-size: 3.12rem 1.82rem;
+            width: 3.12rem;
+            height: 1.82rem;
+            color: #0C4822;
+            font-size: 1.12rem;
+            font-weight: bold;
+            line-height: 1.82rem;
+            margin-top: 0.38rem;
+        }
+
+        .claimBtn {
+            width: 5.14rem;
+            max-width: 900px;
+
+
+            height: 0.95rem;
+            margin-top: 0.8rem;
+
+            background: #009D7F;
+            color: #FFF600;
+            font-size: 24px;
+            font-weight: bold;
+            line-height: 0.95rem;
+            border-radius: 0.1rem;
+        }
+
+        .alertBox {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.4);
+            width: 100%;
+            height: 100vh;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+    <!-- endbuild -->
+</head>
+
+<body>
+
+
+
+    <div class="content">
+        <img class="my-image" src="img/logo.png" alt="">
+        <div class="gameBanner"></div>
+
+        <div id="spin-panel">
+            <div class="spin-wheel" id="spin-wheel">
+                <div class="spin-cover"></div>
+                <div class="light" id="light1"></div>
+                <div class="light2" id="light2"></div>
+                <div class="spin-list">  
+		    <div class="text1">bônus aleatório</div>
+                    <div class="item">20</div>
+                    <div class="item">80</div>
+                    <div class="item">4</div>
+                    <div class="item">50</div>
+                    <div class="item">10</div>
+                    <div class="text2">Obrigado por participa</div>
+                </div>
+
+            </div>
+            <div class="spin-btn" id="spin-btn"></div>
+
+        </div>
+        <div class="getBtn">Clique para girar</div>
+        <h class="tips">Você tem uma rodada grátis</h>
+        <div class="clickCover" id="clickCoverId">
+
+
+        </div>
+        <div class="alertBox" id="popBoxId">
+            <div class="popBox">
+                <div class="popTitle">Parabéns ! Você ganhou</div>
+                <div class="popTips">uma recompensa de</div>
+                <div class="ticket" id="ticketId">2</div>
+                <div class="claimBtn" id="claimBtnId">Receber</div>
+            </div>
+        </div>
+    </div>
+
+
+
+</body>
+<!-- build:js main.js -->
+<script>
+    function getQueryVariable(variable)
+    {
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i=0;i<vars.length;i++) {
+                var pair = vars[i].split("=");
+                if(pair[0] == variable){return pair[1];}
+        }
+        return "";
+    }
+    var code = getQueryVariable("code")
+	var campaign = getQueryVariable("campaign")
+
+    function copyUrl(_sTxt) {
+        // content��
+        // 
+        const aux = document.createElement('input')
+        // 
+        const content = _sTxt;
+        // 
+        aux.setAttribute('value', content)
+        // 
+        document.body.appendChild(aux)
+        // 
+        aux.select()
+        // 
+        document.execCommand('copy')
+        // 
+        document.body.removeChild(aux)
+    }
+
+	function readyAdjust(code,campaign){
+		var img = new Image();
+		let url = "https://view.adjust.com/impression/";
+		if (code != "")
+		  url  = url +"?label="+code;
+		else if (campaign != "")  
+		  url = url + "?campaign="+campaign;
+		if  (code != ""){
+		  img.src =url;
+		}
+		 
+	}
+
+ 
+	function downloadAdjust(code,campaign){
+	 var img = new Image();
+		let url = "https://app.adjust.com/";
+		if (code != "")
+		  url  = url +"?label="+code;
+		else if (campaign != "")  
+		  url = url + "?campaign="+campaign;
+	    if  (code != ""){
+		  if (!code.startsWith("c_"))
+		    code="r_"+code;
+		  copyUrl(code);
+		  img.src =url;
+		}
+	 
+ 
+	 if (isIOS()) {
+      window.location.href="";
+	  return false;
+     }
+   
+	 const link = document.createElement("a");
+	 link.style.display = "none";
+	 link.href =""
+	 link.download = "Meta.apk"
+	 document.body.appendChild(link);
+	 link.click();
+	 document.body.removeChild(link);
+	}
+	
+    function isIOS(){
+        var u = navigator.userAgent;
+        var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios
+        return isiOS;
+    }
+
+    var O = null;
+    var T = function (e) {
+        var t = 2e-5 / Math.sqrt(8);
+        return 1 - Math.pow(t, e)
+    }
+
+    var N = function (e, t, n) {
+        for (var r = "anim".concat(Math.round(9999999 * Math.random())), i = 250, o = n, a = "0% { transform: rotate(".concat(e, "deg); } "), u = 0, s = !1, c = 1; c <= i; c++) {
+            var l = T(c / i) * (t - e);
+            a += "".concat(c / i * 100, "% { transform: rotate(").concat(e + l, "deg); } "),
+                !s && Math.abs(l - u) < .025 && (o *= c / i,
+                    s = !0),
+                u = l
+        }
+        return function (e, t) {
+            O || ((O = window.document.createElement("style")).type = "text/css",
+                window.document.head.appendChild(O));
+
+            var n = "@keyframes ".concat(e, " { ").concat(t, " }");
+            O.sheet.insertRule(n, 0)
+            //console.log(n);
+        }(r, a),
+            [o, r, function (r) {
+                var i = Math.max(Math.min(1, r / n), 0);
+                return T(i) * (t - e)
+            }
+            ]
+    }
+
+
+    var light1 = document.getElementById("light1");
+    var light2 = document.getElementById("light2");
+    light1.style.display = "block";
+    light2.style.display = "none";
+    setInterval(() => {
+        light1.style.display = "none";
+        light2.style.display = "block";
+        setTimeout(() => {
+            light1.style.display = "block";
+            light2.style.display = "none";
+        }, 500);
+    }, 1000);
+
+
+    //8s cubic-bezier(.33,1,.68,1) 0s 1 normal none running spin
+    //  var ss = N(0,5000,1008);
+    //  console.log(ss);
+    // // ss[2](ss[1]);
+
+    // //8s linear 0s 1 normal none running anim3345649
+
+    var isSpin = false;
+    var click = document.getElementById('clickCoverId');
+    var element = document.getElementById("spin-wheel");
+    var popBox = document.getElementById("popBoxId");
+    click.addEventListener("click", function () {
+
+        if (isSpin) {
+            return;
+        }
+        isSpin = true;
+        //element.style.animation ="8s linear 0s 1 normal none running "+ss[1]+"";
+        element.style.animation = "6s cubic-bezier(.33,1,.68,1) 0s 1 normal none running spin";
+
+        setTimeout(() => {
+            element.style.transform = 'rotate(' + 3780 + 'deg)';
+            popBox.style.display = "flex";
+            isSpin = false;
+        }, 6000);
+    });
+
+    var claimBtn = document.getElementById('claimBtnId');
+    claimBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+
+        popBox.style.display = "none";
+        element.style.animation = "";
+        element.style.transform = 'rotate(' + 0 + 'deg)';
+        setTimeout(() => {
+
+            var url = window.location.href;
+            var lastSlashIndex = url.lastIndexOf("/");
+            url = url.substring(0, lastSlashIndex+1);
+
+
+          downloadAdjust(code,campaign);
+		  return false;
+        }, 0);
+
+    });
+ 
+    readyAdjust(code,campaign);
+	
+</script>
+<!-- endbuild -->
+
+</html>
